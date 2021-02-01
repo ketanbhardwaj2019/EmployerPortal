@@ -1,17 +1,31 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom';
+import { store } from './redux/store';
+import App from './containers/App';
+import { fetchConfig } from './redux/actions/configActions';
+//import 'web-ui-components/lib/app.vm.css';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+class AppForm extends Component {
+  componentDidMount() {
+    store.dispatch(fetchConfig());
+  }
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  render() {
+    const { config } = this.props;
+    return (
+      <Provider store={store}>
+        <div> 
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </div>
+      </Provider>
+    );
+  }
+}
+
+export default AppForm;
+
+ReactDOM.render(<AppForm />, document.getElementById("root"));
